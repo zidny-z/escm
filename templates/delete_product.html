@@ -1,0 +1,28 @@
+{% extends 'baseDashboard.html' %}
+{% load static %}
+{% block title %} | Produk {% endblock title %}
+
+{% block sidebar %}
+{% include "sidebarAdmin.html" %}
+{% endblock sidebar %}
+
+
+
+{% block body %}
+
+<h1 class='h3 mt-4 text-gray-800'>Data Produk</h1>
+<h4>Data : {{product.name}} </h4>
+<img src="{{product.image.url}}" class="card-img-top mx-auto d-block mt-3 shadow-lg" style="width: 300px; height: 180px; object-fit: cover;">
+
+
+<div class="form-group">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <strong> Yakin ingin menghapus data ini?</strong>
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    </div>
+
+
+{% endblock body%}
