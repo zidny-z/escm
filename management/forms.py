@@ -18,6 +18,10 @@ class PenawaranForm(forms.ModelForm):
         }
 
 class TransaksiBaru(forms.ModelForm):
+    # def __init__(self, *args, **kwargs):
+    #     super(TransaksiBaru, self).__init__(*args, **kwargs)
+    #     self.fields['supplier'].queryset = Supplier.objects.filter(count_product_supplier>0)
+    
     class Meta:
         model = Order
         fields = ['supplier','bengkel']
@@ -27,6 +31,11 @@ class TransaksiBaru(forms.ModelForm):
         }
 
 class TransaksiItem(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TransaksiItem, self).__init__(*args, **kwargs)
+        supplier1 = Order.objects.first().supplier
+        # product_filtered = Product.objects.filter(supplier=4)
+        self.fields['product'].queryset = Product.objects.filter(supplier=supplier1)
     
     class Meta:
         model = OrderItem
@@ -35,16 +44,6 @@ class TransaksiItem(forms.ModelForm):
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'product': forms.Select(attrs={'class': 'form-control'}),
         }
-    
-
-# class TransaksiItem(forms.ModelForm):
-#     class Meta:
-#         model = OrderItem
-#         fields = ['quantity','product']
-#         widgets = {
-#         'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
-#         'product': forms.Select(attrs={'class': 'form-control'}),
-        # }
 
 
 class AddCategoryForm(forms.ModelForm):

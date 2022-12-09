@@ -197,10 +197,24 @@ def transaksiDetail(request, order_id):
         form.instance.supplier = order.supplier
         form.instance.bengkel = order.bengkel
         form.instance.orderDate = order.orderDate
+        form.instance.isApprove = True
         if form.is_valid():
             form.save()
+            # simpan ke stock
+            # create/save
+            terbeli = OrderItem.objects.get(orderId=order.id)
+            bengkel = order.bengkel
+            product = terbeli.product
+            quantity = terbeli.quantity
+            try: 
+                stock = Stock.objects.get(bengkel=bengkel, product=product)
+                stock.stockCount += quantity
+                stock.save()
+            except:
+                stock = Stock(bengkel=bengkel, product=product, stockCount=quantity, minStock=0)
+                stock.save()
+
             return HttpResponseRedirect('/transaksi/')
-            # return HttpResponseRedirect('/transaksi/'+str(order_id))
     else:
           form =  TransaksiForm
     return render(request, 'transaksiDetail.html',{
@@ -242,7 +256,7 @@ def transaksiItemCreate(request, order_id):
     return render(request, 'transaksiItem.html',{
                 'order': order,
                 'form':form,
-                'transaksi': OrderItem.objects.prefetch_related("orderId","product", "product__brand","product__category",).filter(orderId_id=order_id),
+                # 'transaksi': OrderItem.objects.prefetch_related("orderId","product", "product__brand","product__category",).filter(orderId_id=order_id),
             })
 
 

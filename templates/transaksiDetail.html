@@ -17,7 +17,11 @@
 {% if order.bukti != "" and order.bukti != null %}
 <a class="demo01 text-black d-flex" href="{{order.bukti.url}}">Lihat Gambar</a>
 
-{% else %} 
+{% elif order.isApprove == False and user.role == 'SV' %}
+<p> Order tidak atau belum disetujui, anda bisa menambahkan data pembayaran bila transaksi disetujui.</p>
+
+
+{% elif order.isApprove == True and user.role == 'SV' %} 
      <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           {{ form.as_p }}

@@ -4,7 +4,8 @@ from django.contrib.auth.models import AbstractUser
 # from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
 from django.db import models
-
+# from django.db.models.signals import pre_save
+# from django.dispatch import receiver
 
 
 class Account(AbstractUser):
@@ -49,6 +50,9 @@ class Supplier(models.Model):
     def get_absolute_url(self):
         return reverse("Supplier_detail", kwargs={"pk": self.pk})
 
+    @property
+    def count_product_supplier(self):
+        return Product.objects.filter(supplier=self).count()
 
 class Bengkel(models.Model):
     name = models.CharField(max_length=25)
@@ -145,6 +149,12 @@ class Order(models.Model):
     
     class Meta:
         ordering = ['-orderDate','isApprove']
+
+# signal
+# @receiver(pre_save, sender=Order)
+# def bukti_pre_save_receiver(sender, instance, **kwargs):
+#     print('bukti teruploud')
+
 
 
 class OrderItem(models.Model):
