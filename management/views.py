@@ -288,7 +288,7 @@ class PenawaranCreate(LoginRequiredMixin, CreateView):
 
 @login_required
 def editAccount(request, account_name):
-    return render(request, "profile.html",{})
+    return render(request, "profile.html")
 
 @login_required
 def saveAccount(request, account_name):
